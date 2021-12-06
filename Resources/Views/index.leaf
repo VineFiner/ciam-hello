@@ -1,0 +1,16 @@
+#extend("base"):
+  #export("content"):
+    <h1>#(title)</h1>
+    
+    <div>
+    
+    #if(loggedUser):
+      当前用户 #(loggedUser.name)
+    #else:
+      <a class="btn btn-primary" href="userinfo" role="button">获取用户信息</a>
+    #endif
+
+    </div>
+    
+  #endexport
+#endextend

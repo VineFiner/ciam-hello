@@ -1,0 +1,43 @@
+# https://github.com/serverless-components/tencent-scf/blob/master/docs/configure.md
+
+# org: '${env:TENCENT_APP_ID}'
+#应用组织信息
+# stage: '${env:STAGE}' # 环境名称。默认值是 dev。建议使用${env.STAGE}变量定义环境名称
+app: '${env:APP_NAME}' # 应用名称。留空则默认取当前组件的实例名称为app名称。
+
+#组件信息
+component: scf # (必选) 组件名称，在该实例中为scf
+name: '${env:INSTANCE_NAME}' # (必选) 组件实例名称。
+
+inputs: #组件参数配置
+    name: ciam_hello # 云函数名称，默认为 ${name}-${stage}-${app}
+    src: ./.build/install
+    exclude: # 排除
+        - .env
+    type: web # 函数类型，默认为 event(事件类型)，web(web类型)
+    region: '${env:REGION}' # 函数所在区域 ap-hongkong
+    description: 'This is a function in ${app} application.'
+    runtime: '${env:RUNTIME}' # 运行环境 默认 Nodejs10.15, 支持 Nodejs12.16, CustomRuntime
+    memorySize: 64 # 内存大小，单位MB
+    environment: #  环境变量
+        variables: #  环境变量对象
+            CIAM_CLIENTID: '${env:CIAM_CLIENTID}'   # ciam ID
+            CIAM_CLIENTSECRET: '${env:CIAM_CLIENTSECRET}'   # ciam Secret
+            CIAM_USERDOMAMIN: '${env:CIAM_USERDOMAMIN}' # ciam domain
+            CIAM_REDIRECTURI: '${env:CIAM_REDIRECTURI}' # ciam callback
+            CAIM_LOGOUTREDIRECTURL: '${env:CAIM_LOGOUTREDIRECTURL}' # ciam logout
+    events: # 触发器
+    - apigw: # api网关触发器，已有apigw服务，配置触发器
+        parameters:
+            serviceName: ciam_hello_serverless
+            description: 'ciam hello'
+            endpoints:
+            - function:
+                method: ANY
+                path: /
+            environment: release
+            protocols:
+            - http
+            - https
+# END
+

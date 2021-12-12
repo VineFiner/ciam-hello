@@ -1,0 +1,43 @@
+{
+    "component": "scf",
+    "name": "${env:INSTANCE_NAME}",
+    "org": "${env:TENCENT_APP_ID}",
+    "app": "${env:APP_NAME}",
+    "inputs": {
+        "name": "${env:APP_NAME}",
+        "region": "${env:REGION}",
+        "runtime": "${env:RUNTIME}",
+        "type": "web",
+        "src": {
+            "src": "./install",
+            "exclude": [".env"]
+        },
+        "memorySize": 64,
+        "environment": {
+            "variables": {
+                "CIAM_CLIENTID": "${env:CIAM_CLIENTID}",
+                "CIAM_CLIENTSECRET": "${env:CIAM_CLIENTSECRET}",
+                "CIAM_USERDOMAMIN":"${env:CIAM_USERDOMAMIN}",
+                "CIAM_REDIRECTURI": "${env:CIAM_REDIRECTURI}",
+                "CAIM_LOGOUTREDIRECTURL": "${env:CAIM_LOGOUTREDIRECTURL}"
+            }
+        },
+        "events": [{
+            "apigw": {
+                "parameters": {
+                    "serviceName": "ciam_hello_serverless",
+                    "description": "ciam hello",
+                    "endpoints": [{
+                        "function": {
+                            "isIntegratedResponse": true
+                        },
+                        "method": "ANY",
+                        "path": "/"
+                    }],
+                    "protocols": ["http", "https"],
+                    "environment": "release"
+                }
+            }
+        }]
+    }
+}

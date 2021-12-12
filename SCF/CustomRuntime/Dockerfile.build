@@ -1,0 +1,61 @@
+# ================================
+# Build image
+# ================================
+FROM swift:5.5.1-centos7 as build
+
+# 安装更新和依赖
+#
+RUN yum update -y \
+    && yum remove git -y \
+    && yum -y install https://packages.endpoint.com/rhel/7/os/x86_64/endpoint-repo-1.7-1.x86_64.rpm \
+    && yum install git -y
+
+# 设置构建目录
+#
+WORKDIR /build
+
+# 解决依赖
+# 这将创建一个可重复使用的缓存层
+#
+COPY ./Package.* ./
+RUN git config --global url."https://ghproxy.com/https://".insteadOf https:// \
+    && swift package resolve
+
+# 将整个仓库复制到容器中
+#
+COPY . .
+
+# 通过优化和测试构建
+#
+RUN swift build -c release
+
+# 切换到暂存目录
+#
+WORKDIR /staging
+
+# 复制可执行二进制文件
+#
+RUN cp "$(swift build --package-path /build -c release --show-bin-path)/Run" ./
+
+# 复制依赖库
+#
+RUN ldd ./Run | grep swift | awk '{print $3}' | xargs cp -Lv -t ./
+
+# 复制公共目录文件, 并配置只读权限
+#
+# RUN [ -d /build/Public ] && { mv /build/Public ./Public && chmod -R a-w ./Public; } || true
+RUN [ -d /build/Public ] && { mv /build/Public ./Public; } || true
+
+# 复制视图目录文件, 并配置只读权限
+#
+# RUN [ -d /build/Resources ] && { mv /build/Resources ./Resources && chmod -R a-w ./Resources; } || true
+RUN [ -d /build/Resources ] && { mv /build/Resources ./Resources; } || true
+
+
+# ================================
+# Production image 生产镜像
+# ================================
+
+
+# END
+

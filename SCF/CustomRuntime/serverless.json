@@ -9,7 +9,7 @@
         "runtime": "${env:RUNTIME}",
         "type": "web",
         "src": {
-            "src": "./install",
+            "src": "./app",
             "exclude": [".env"]
         },
         "memorySize": 64,

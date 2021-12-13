@@ -31,7 +31,8 @@ struct AppConfig {
               let userDomain = Environment.get("CIAM_USERDOMAMIN"),
               let redirectUri = Environment.get("CIAM_REDIRECTURI"),
               let logoutRedirectUrl = Environment.get("CAIM_LOGOUTREDIRECTURL") else {
-                  fatalError("Please add app configuration to environment variables")
+                  assertionFailure("Please add app configuration to environment variables")
+                  return .init(clientId: "", clientSecret: "", userDomain: "", redirectUri: "", logoutRedirectUrl: "", scopes: [])
               }
         
         return .init(clientId: clientId,

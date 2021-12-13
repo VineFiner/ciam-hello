@@ -1,0 +1,15 @@
+#extend("base.html"):
+#export("content"):
+<section class="p-5 text-black text-center text-sm-start">
+  <div class="container">
+    <div>
+      #if(loggedUser):
+      当前用户 #(loggedUser.name)
+      #else:
+      <a class="btn btn-primary" href="userinfo" role="button">文件信息</a>
+      #endif
+    </div>
+  </div>
+</section>
+#endexport
+#endextend

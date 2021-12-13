@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cima Hello</title>
+
+    <!-- Bootstrap CSS -->
+    #extend("headContent.html"): Bootstrap CSS 扩展 #endextend
+</head>
+<body>
+    #extend("navbar.html"): 导航条扩展 #endextend
+
+    <!-- 内容 -->
+    #import("content")
+
+    <!-- Bootstrap JS -->
+    #extend("footerAndScripts.html"): 放在 body 底部 #endextend
+</body>
+</html>

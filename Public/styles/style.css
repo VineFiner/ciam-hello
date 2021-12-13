@@ -18,3 +18,15 @@
 #appleid-signin > div {
   outline: none;
 }
+
+@media (min-width: 768px) {
+    .news-input {
+        width: 50%;
+    }
+}
+
+body::before {
+    display: block;
+    content: '';
+    height: 56px;
+}

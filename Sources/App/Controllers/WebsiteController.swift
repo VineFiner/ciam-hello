@@ -35,7 +35,7 @@ struct WebsiteController: RouteCollection {
     func indexHandler(_ req: Request) -> EventLoopFuture<View> {
         let loggedUser = req.auth.get(User.self)
         let context = IndexContext(title: "Hello Ciam", loggedUser: loggedUser)
-        return req.view.render("index", context)
+        return req.view.render("index.html", context)
     }
     
     func loginHandler(_ req: Request) throws -> EventLoopFuture<Response> {
@@ -46,7 +46,7 @@ struct WebsiteController: RouteCollection {
         } else {
             context = LoginContext(siwaContext: siwaContext)
         }
-        return req.view.render("login.html", context)
+        return req.view.render("Ciam/login.html", context)
             .encodeResponse(for: req)
             .map { response in
                 let expiryDate = Date().addingTimeInterval(300)

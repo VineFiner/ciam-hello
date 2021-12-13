@@ -12,12 +12,18 @@ struct DirectoryManagerController: RouteCollection {
     
     func boot(routes: RoutesBuilder) throws {
         let files = routes.grouped("files")
+        files.get(use: site)
         files.get("path", use: readDirectory)
         
         // 这里是受保护路由
         let protectedRoutes = files.grouped(User.sessionAuthenticator())
         protectedRoutes.get("sub-path", use: readSubpathsDirectory)
         protectedRoutes.get("delete", use: deletePathFile)
+    }
+    
+    // 页面信息
+    func site(req: Request) async throws -> View {
+        return try await req.view.render("FileManager/index.html")
     }
     
     /**
